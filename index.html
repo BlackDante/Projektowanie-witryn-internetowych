@@ -5,7 +5,7 @@
     <title>Dane osobowe</title>
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" media="screen" charset="utf-8">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" media="screen" charset="utf-8">
-    <script type="text/javascript" src="bower_components/jquery/dist/jquery.min"></script>
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <script>
@@ -13,12 +13,29 @@
             $('form').submit(function (evt) {
                 evt.preventDefault();
 
-                $.post('api', {
-                    firstname: $('#firstname').val(),
-                    lastname: $('#lastname').val(),
-                    pesel: $('#pesel').val()
-                }).done(function (response) {
+                $('button').attr('disabled', true);
 
+                $.ajax({
+                    type: 'POST',
+                    url: 'api/index.php',
+                    data: {
+                        firstname: $('#firstname').val(),
+                        lastname: $('#lastname').val(),
+                        pesel: $('#pesel').val()
+                    },
+                    success: function (response) {
+                        if (!response.status) {
+                            $('.modal-content').html("Nie poprawny pesel");
+                            $('button').attr('disabled', false);
+                        } else {
+                            $('.modal-content').html("Rekord zapisany w bazie danych");
+                        }
+
+                        $('.modal').modal({
+                            show: true
+                        });
+                    },
+                    dataType: 'json'
                 });
             })
         });
@@ -26,21 +43,29 @@
 </head>
 <body>
     <div class="container">
-        <form action="api" method="post">
+        <form action="api" method="get">
             <div class="form-group">
                 <label for="firstname">Imię:</label>
-                <input type="firstname" class="form-control" id="firstname" placeholder="Imię">
+                <input type="text" class="form-control" name="firstname" id="firstname" placeholder="Imię" required>
             </div>
             <div class="form-group">
                 <label for="lastname">Nazwisko:</label>
-                <input type="lastname" class="form-control" id="lastname" placeholder="Nazwisko">
+                <input type="text" class="form-control" name="lastname" id="lastname" placeholder="Nazwisko" required>
             </div>
             <div class="form-group">
                 <label for="pesel">Pesel:</label>
-                <input type="pesel" class="form-control" id="pesel" placeholder="00000000000">
+                <input type="number" class="form-control" name="pesel" id="pesel" placeholder="00000000000" required="required" pattern="/[0-9]{11}/">
             </div>
             <button type="submit" class="btn btn-default">Wyślij</button>
         </form>
+
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    Saved!!
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

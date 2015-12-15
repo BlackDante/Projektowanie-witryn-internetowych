@@ -5,14 +5,18 @@ Projekt na zaliczenie przedmiotu.
 ## Wymagania
 
  - PHP:
-   - [ ] Zapis do bazy danych
-   - [ ] Wysylanie maila na podany adres
+   - [x] Zapis do bazy danych
+   - [x] Wysylanie maila na podany adres
  - MySQL:
-   - [ ] Stworzenie tabeli
+   - [x] Stworzenie tabeli
  - HTML:
-   - [ ] Stworzenie formularza
+   - [x] Stworzenie formularza
 
 ## Deps
 
   - Bower
-  - Bootstrap  
+  - Bootstrap
+
+## Setup
+
+  - `bower install`  
